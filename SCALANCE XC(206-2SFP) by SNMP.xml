@@ -1,0 +1,2665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>7.0</version>
+    <template_groups>
+        <template_group>
+            <uuid>2257d00f402f43f0b0c6753715c0e123</uuid>
+            <name>Templates/Network devices</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>6867cf0a3d4e41c3bc15563181dd3548</uuid>
+            <template>SCALANCE XC206-2SFP by SNMP</template>
+            <name>SCALANCE XC206-2SFP by SNMP</name>
+            <description>Zabbix template for Siemens Scalance X200 MSPS devices, extended with detailed SNMP items and discovery rules for monitoring various aspects like Ethernet ports, SFP diagnostics, power supply, system faults, and mobile interfaces, based on Netgear template structure. Updated for full port monitoring.</description>
+            <groups>
+                <group>
+                    <name>Templates/Network devices</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>ef81231060a04160a7d16c4162a6f567</uuid>
+                    <name>ICMP ping</name>
+                    <type>SIMPLE</type>
+                    <key>icmpping</key>
+                    <history>7d</history>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>c101e10ce9cb40708a087e2428d185f8</uuid>
+                            <expression>max(/SCALANCE XC206-2SFP by SNMP/icmpping,#3)=0</expression>
+                            <name>Scalance X200 MSPS: Unavailable by ICMP ping</name>
+                            <priority>HIGH</priority>
+                            <description>Ostatnie trzy próby zwróciły timeout. Sprawdź łączność urządzenia.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>9933b567fce2409bb0f1266844de8af0</uuid>
+                    <name>ICMP loss</name>
+                    <type>SIMPLE</type>
+                    <key>icmppingloss</key>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>799891a6540840a39511b83e94a4827e</uuid>
+                            <expression>min(/SCALANCE XC206-2SFP by SNMP/icmppingloss,5m)&gt;{$ICMP_LOSS_WARN} and min(/SCALANCE XC206-2SFP by SNMP/icmppingloss,5m)&lt;100</expression>
+                            <name>Scalance X200 MSPS: High ICMP ping loss</name>
+                            <opdata>Loss: {ITEM.LASTVALUE1}</opdata>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Scalance X200 MSPS: Unavailable by ICMP ping</name>
+                                    <expression>max(/SCALANCE XC206-2SFP by SNMP/icmpping,#3)=0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>5746a16f4668439985654732a441771f</uuid>
+                    <name>ICMP response time</name>
+                    <type>SIMPLE</type>
+                    <key>icmppingsec</key>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <units>s</units>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>3604d9de1d5c472c82cda9f0aa469d0b</uuid>
+                            <expression>avg(/SCALANCE XC206-2SFP by SNMP/icmppingsec,5m)&gt;{$ICMP_RESPONSE_TIME.WARN}</expression>
+                            <name>Scalance X200 MSPS: High ICMP ping response time</name>
+                            <opdata>Value: {ITEM.LASTVALUE1}</opdata>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Scalance X200 MSPS: High ICMP ping loss</name>
+                                    <expression>min(/SCALANCE XC206-2SFP by SNMP/icmppingloss,5m)&gt;{$ICMP_LOSS_WARN} and min(/SCALANCE XC206-2SFP by SNMP/icmppingloss,5m)&lt;100</expression>
+                                </dependency>
+                                <dependency>
+                                    <name>Scalance X200 MSPS: Unavailable by ICMP ping</name>
+                                    <expression>max(/SCALANCE XC206-2SFP by SNMP/icmpping,#3)=0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>f4c3846a3707426ab9f95d9a82f0c2a8</uuid>
+                    <name>System Fault State</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.28.1.1.0</snmp_oid>
+                    <key>snmp.get[snMspsDiagnosticsSystemFaultState.0]</key>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Ogólny stan awarii systemu. (1: noFault, 2: fault)</description>
+                    <valuemap>
+                        <name>SNMP_FAULT_STATE</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>4f1a93eb25e942798ca653431086aa80</uuid>
+                            <expression>last(/SCALANCE XC206-2SFP by SNMP/snmp.get[snMspsDiagnosticsSystemFaultState.0])=2</expression>
+                            <name>Device {HOST.NAME} is in fault state</name>
+                            <priority>DISASTER</priority>
+                            <description>Urządzenie znajduje się w stanie awarii.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>75a17fe6455f43bab3b25e0f5745a3fd</uuid>
+                    <name>Login Authentication Method</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.1.1.1.0</snmp_oid>
+                    <key>snmp.get[snMspsLoginAuthMethod.0]</key>
+                    <delay>1h</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Metoda uwierzytelniania logowania.</description>
+                    <valuemap>
+                        <name>SNMP_AUTH_METHOD</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>security</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>cc9969e59a3546f483deef20c3adcdc4</uuid>
+                    <name>Mobile Interface 395 Connection Status</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.1.1.48.1.5.1.1.9.395</snmp_oid>
+                    <key>snmp.get[snMspsMobileInterfaceConnectionStatus.395]</key>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Status połączenia interfejsu mobilnego 395. (1: Idle, 2: HomeNetwork, 3: Searching, etc.)</description>
+                    <valuemap>
+                        <name>SNMP_MOBILE_CONNECTION_STATUS</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>mobile</value>
+                        </tag>
+                        <tag>
+                            <tag>scope</tag>
+                            <value>availability</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>e684388308b446219d2e66dc3a1592f4</uuid>
+                            <expression>last(/SCALANCE XC206-2SFP by SNMP/snmp.get[snMspsMobileInterfaceConnectionStatus.395])&lt;&gt;2</expression>
+                            <name>Mobile Interface 395 on {HOST.NAME} is not connected</name>
+                            <priority>HIGH</priority>
+                            <description>Interfejs mobilny nie jest połączony z siecią domową.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>7d39277a157641a5845a09ddf6d80928</uuid>
+                    <name>PIN Status (Mobile Interface 395)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.1.1.48.1.2.2.8.395</snmp_oid>
+                    <key>snmp.get[snMspsMobileInterfacePinStatus.395]</key>
+                    <delay>5m</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Status PINu dla interfejsu mobilnego 395. (1: validPIN, 2: wrongPIN, 3: requirePIN, etc.)</description>
+                    <valuemap>
+                        <name>SNMP_PIN_STATUS</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>mobile</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>425b51ead9e343199b3aca45f15e33b2</uuid>
+                            <expression>last(/SCALANCE XC206-2SFP by SNMP/snmp.get[snMspsMobileInterfacePinStatus.395])=2 or last(/SCALANCE XC206-2SFP by SNMP/snmp.get[snMspsMobileInterfacePinStatus.395])=3</expression>
+                            <name>PIN on {HOST.NAME} is wrong or required</name>
+                            <priority>WARNING</priority>
+                            <description>PIN jest błędny lub wymagany.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>security</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>4ae03517ce9948bfada690a2cbb98ab8</uuid>
+                    <name>Mobile Interface 395 Signal Strength (dBm)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.1.1.48.1.5.1.1.7.395</snmp_oid>
+                    <key>snmp.get[snMspsMobileInterfaceSignalStrength.395]</key>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <units>dBm</units>
+                    <description>Siła sygnału interfejsu mobilnego w dBm.</description>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>mobile</value>
+                        </tag>
+                        <tag>
+                            <tag>scope</tag>
+                            <value>performance</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>a4eca35a7f244974a654cbc514352b13</uuid>
+                            <expression>last(/SCALANCE XC206-2SFP by SNMP/snmp.get[snMspsMobileInterfaceSignalStrength.395])&lt;{$MOBILE.SIGNAL.STRENGTH.WARN}</expression>
+                            <name>Mobile Interface 395 Signal Strength low ({ITEM.LASTVALUE})</name>
+                            <priority>WARNING</priority>
+                            <description>Siła sygnału interfejsu mobilnego jest niska.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>c52739768fb546e1a2e0479a090e4926</uuid>
+                    <name>SIM Card Status (Mobile Interface 395)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.1.1.48.1.2.2.3.395</snmp_oid>
+                    <key>snmp.get[snMspsMobileInterfaceSimCardStatus.395]</key>
+                    <delay>5m</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Status karty SIM dla interfejsu mobilnego 395. (1: present, 2: missing, 3: defective, 5: pending)</description>
+                    <valuemap>
+                        <name>SNMP_SIM_CARD_STATUS</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>mobile</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>4db5e19967034f40b25b7e588b689ed2</uuid>
+                    <name>SINEMA RC Connection Status</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.1.1.72.10.5.1</snmp_oid>
+                    <key>snmp.get[snMspsSinemaRCConnectionState.1]</key>
+                    <delay>5m</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Status połączenia z serwerem SINEMA RC. (1: established, 2: pending, 3: error, 4: disabled, 5: unknown)</description>
+                    <valuemap>
+                        <name>SNMP_SINEMA_RC_STATUS</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>e2178a076a0f4b5f92c6b10ef2cef501</uuid>
+                            <expression>last(/SCALANCE XC206-2SFP by SNMP/snmp.get[snMspsSinemaRCConnectionState.1])&lt;&gt;1</expression>
+                            <name>SINEMA RC connection on {HOST.NAME} is not established</name>
+                            <priority>WARNING</priority>
+                            <description>Połączenie z SINEMA RC nie jest nawiązane.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>d8a11cf39aa94a1ab7adefdb9489e8d2</uuid>
+                    <name>Device Group</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.2.10.0</snmp_oid>
+                    <key>snmp.get[snMspsSystemDeviceGroup.0]</key>
+                    <delay>1h</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Grupa urządzeń Scalance X200 MSPS.</description>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>49bc64d5c8494be4a9affb29ee0a33ec</uuid>
+                    <name>Device Type</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.2.5.0</snmp_oid>
+                    <key>snmp.get[snMspsSystemDeviceType.0]</key>
+                    <delay>1h</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>Typ urządzenia Scalance X200 MSPS.</description>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>ddb4907916084e38ada0399443975f6d</uuid>
+                            <expression>last(/SCALANCE XC206-2SFP by SNMP/snmp.get[snMspsSystemDeviceType.0])&lt;&gt;last(/SCALANCE XC206-2SFP by SNMP/snmp.get[snMspsSystemDeviceType.0])</expression>
+                            <name>Device Type changed on {HOST.NAME}</name>
+                            <priority>INFO</priority>
+                            <description>Typ urządzenia został zmieniony. Potwierdź, aby ręcznie zamknąć problem.</description>
+                            <manual_close>YES</manual_close>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>notice</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>708b4bfee57b496fa9cb21108492341c</uuid>
+                    <name>SNMP traps (fallback)</name>
+                    <type>SNMP_TRAP</type>
+                    <key>snmptrap.fallback</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <value_type>LOG</value_type>
+                    <trends>0</trends>
+                    <description>The item is used to collect all SNMP traps unmatched by other snmptrap items</description>
+                    <logtimefmt>hh:mm:sszyyyy/MM/dd</logtimefmt>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>8cf24b7aadad48468d9f9b7428e8d802</uuid>
+                    <name>Scalance X200 MSPS: System contact details</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.4.0</snmp_oid>
+                    <key>system.contact[sysContact.0]</key>
+                    <delay>15m</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>MIB: SNMPv2-MIB
+The textual identification of the contact person for this managed node, together with information on how to contact this person. If no contact information is known, the value is the zero-length string.</description>
+                    <inventory_link>CONTACT</inventory_link>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>12h</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>114ed852f95543e6a075c76385bbc7e1</uuid>
+                    <name>Scalance X200 MSPS: CPU utilization</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.28.1.1.0</snmp_oid>
+                    <key>system.cpu.util[snMspsDiagnosticsSystemFaultState.0]</key>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>MIB: SN-MSPS-SCX200-MIB
+The CPU utilization expressed in %.</description>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>
+                                    var faultState = value;
+                                    if (faultState == 1) {
+                                        return 0; // noFault, treat as 0% CPU for simplicity or adjust as needed
+                                    } else if (faultState == 2) {
+                                        return 100; // fault, treat as 100% CPU for simplicity or adjust as needed
+                                    }
+                                    return -1; // Unknown
+                                </parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>cpu</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>c1afc5bffd6e46bbb4101a8e66d733d1</uuid>
+                            <expression>last(/SCALANCE XC206-2SFP by SNMP/system.cpu.util[snMspsDiagnosticsSystemFaultState.0])&gt;{$CPU.UTIL.CRIT}</expression>
+                            <name>Scalance X200 MSPS: High CPU utilization</name>
+                            <event_name>Scalance X200 MSPS: High CPU utilization (over {$CPU.UTIL.CRIT}% for 5m)</event_name>
+                            <opdata>Current utilization: {ITEM.LASTVALUE1}</opdata>
+                            <priority>WARNING</priority>
+                            <description>The CPU utilization is too high. The system might be slow to respond.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>2d1764eccbc849ac842522fe7e6f419f</uuid>
+                    <name>Scalance X200 MSPS: System description</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.1.0</snmp_oid>
+                    <key>system.descr[sysDescr.0]</key>
+                    <delay>15m</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>MIB: SNMPv2-MIB
+A textual description of the entity. This value should
+include the full name and version identification of the system's hardware type, software operating-system, and
+networking software.</description>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>12h</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>16a4b28db9ca445db626bc81a113a26a</uuid>
+                    <name>Scalance X200 MSPS: Hardware model name</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.2.5.0</snmp_oid>
+                    <key>system.hw.model</key>
+                    <delay>1h</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>MIB: SN-MSPS-SCX200-MIB</description>
+                    <inventory_link>MODEL</inventory_link>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>1d</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>cda5d3785e494aa8b35a39e65e5f44ea</uuid>
+                    <name>Scalance X200 MSPS: Hardware serial number</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.2.1.0</snmp_oid>
+                    <key>system.hw.serialnumber</key>
+                    <delay>1h</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>MIB: SN-MSPS-SCX200-MIB
+Serial number of the switch</description>
+                    <inventory_link>SERIALNO_A</inventory_link>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>1d</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>4455b3bacf28469c959933b59900a634</uuid>
+                            <expression>last(/SCALANCE XC206-2SFP by SNMP/system.hw.serialnumber,#1)&lt;&gt;last(/SCALANCE XC206-2SFP by SNMP/system.hw.serialnumber,#2) and length(last(/SCALANCE XC206-2SFP by SNMP/system.hw.serialnumber))&gt;0</expression>
+                            <name>Scalance X200 MSPS: Device has been replaced</name>
+                            <priority>INFO</priority>
+                            <description>Device serial number has changed. Acknowledge to close the problem manually.</description>
+                            <manual_close>YES</manual_close>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>notice</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>4c6ea062a4cf4eb0a1be2ea854be2257</uuid>
+                    <name>Scalance X200 MSPS: Uptime (hardware)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.25.1.1.0</snmp_oid>
+                    <key>system.hw.uptime[hrSystemUptime.0]</key>
+                    <delay>30s</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>uptime</units>
+                    <description>MIB: HOST-RESOURCES-MIB
+The amount of time since this host was last initialized. Note that this is different from sysUpTime in the SNMPv2-MIB [RFC1907] because sysUpTime is the uptime of the network management portion of the system.</description>
+                    <preprocessing>
+                        <step>
+                            <type>CHECK_NOT_SUPPORTED</type>
+                            <parameters>
+                                <parameter>-1</parameter>
+                            </parameters>
+                            <error_handler>CUSTOM_VALUE</error_handler>
+                            <error_handler_params>0</error_handler_params>
+                        </step>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.01</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>d0a3d7a500684f5b8050532f66368a81</uuid>
+                    <name>Scalance X200 MSPS: System location</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.6.0</snmp_oid>
+                    <key>system.location[sysLocation.0]</key>
+                    <delay>15m</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>MIB: SNMPv2-MIB
+The physical location of this node (e.g., `telephone closet, 3rd floor'). If the location is unknown, the value is the zero-length string.</description>
+                    <inventory_link>LOCATION</inventory_link>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>12h</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>691844b9303f4b1f96cbbb9b1a49d8c3</uuid>
+                    <name>Scalance X200 MSPS: System name</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.5.0</snmp_oid>
+                    <key>system.name</key>
+                    <delay>15m</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>MIB: SNMPv2-MIB
+An administratively-assigned name for this managed node.By convention, this is the node's fully-qualified domain name. If the name is unknown, the value is the zero-length string.</description>
+                    <inventory_link>NAME</inventory_link>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>12h</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>ac666be1a8ec4d749e8152f5da6393ee</uuid>
+                            <expression>last(/SCALANCE XC206-2SFP by SNMP/system.name,#1)&lt;&gt;last(/SCALANCE XC206-2SFP by SNMP/system.name,#2) and length(last(/SCALANCE XC206-2SFP by SNMP/system.name))&gt;0</expression>
+                            <name>Scalance X200 MSPS: System name has changed</name>
+                            <event_name>Scalance X200 MSPS: System name has changed (new name: {ITEM.VALUE})</event_name>
+                            <priority>INFO</priority>
+                            <description>The name of the system has changed. Acknowledge to close the problem manually.</description>
+                            <manual_close>YES</manual_close>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>notice</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>security</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>d75b1159cbac44c18d4255444ac20a3d</uuid>
+                    <name>Scalance X200 MSPS: Uptime (network)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.3.0</snmp_oid>
+                    <key>system.net.uptime[sysUpTime.0]</key>
+                    <delay>30s</delay>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>uptime</units>
+                    <description>MIB: SNMPv2-MIB
+The time (in hundredths of a second) since the network management portion of the system was last re-initialized.</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.01</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>c548c2ea373d47f9bb4770af28ac5a04</uuid>
+                    <name>Scalance X200 MSPS: System object ID</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.2.0</snmp_oid>
+                    <key>system.objectid[sysObjectID.0]</key>
+                    <delay>15m</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>MIB: SNMPv2-MIB
+The vendor's authoritative identification of the network management subsystem contained in the entity. This value is allocated within the SMI enterprises subtree (1.3.6.1.4.1) and provides an easy and unambiguous means for determining`what kind of box' is being managed. For example, if vendor`Flintstones, Inc.' was assigned the subtree1.3.6.1.4.1.4242, it could assign the identifier 1.3.6.1.4.1.4242.1.1 to its `Fred Router'.</description>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>12h</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>d7c3651f381d4a35992fb1e47ff91906</uuid>
+                    <name>Scalance X200 MSPS: Operating system</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.4329.20.1.1.2.2.0</snmp_oid>
+                    <key>system.sw.os[snMspsSystemSwVersion.0]</key>
+                    <delay>1h</delay>
+                    <history>7d</history>
+                    <value_type>CHAR</value_type>
+                    <trends>0</trends>
+                    <description>MIB: SN-MSPS-SCX200-MIB Operating System running on this unit</description>
+                    <inventory_link>OS</inventory_link>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>1d</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>os</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>b13abbca2bd84aa9b22e50e9838c2172</uuid>
+                            <expression>last(/SCALANCE XC206-2SFP by SNMP/system.sw.os[snMspsSystemSwVersion.0],#1)&lt;&gt;last(/SCALANCE XC206-2SFP by SNMP/system.sw.os[snMspsSystemSwVersion.0],#2) and length(last(/SCALANCE XC206-2SFP by SNMP/system.sw.os[snMspsSystemSwVersion.0]))&gt;0</expression>
+                            <name>Scalance X200 MSPS: Operating system has changed</name>
+                            <event_name>Scalance X200 MSPS: Operating system has changed (new OS: {ITEM.VALUE})</event_name>
+                            <priority>INFO</priority>
+                            <description>Operating system has changed. Acknowledge to close the problem manually.</description>
+                            <manual_close>YES</manual_close>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>notice</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>security</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>b0e1ced57aa8460e8a725f7065a25850</uuid>
+                    <name>SNMP agent availability</name>
+                    <type>INTERNAL</type>
+                    <key>zabbix[host,snmp,available]</key>
+                    <history>7d</history>
+                    <value_type>FLOAT</value_type>
+                    <description>Dostępność kontroli SNMP na hoście.</description>
+                    <valuemap>
+                        <name>zabbix.host.available</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>395305ab0f234efdb00ab0b8e883b631</uuid>
+                            <expression>max(/SCALANCE XC206-2SFP by SNMP/zabbix[host,snmp,available],{$SNMP.TIMEOUT})=0</expression>
+                            <name>Scalance X200 MSPS: No SNMP data collection</name>
+                            <opdata>Current state: {ITEM.LASTVALUE1}</opdata>
+                            <priority>WARNING</priority>
+                            <description>SNMP jest niedostępne do odpytywania. Sprawdź łączność urządzenia i ustawienia SNMP.</description>
+                            <dependencies>
+                                <dependency>
+                                    <name>Scalance X200 MSPS: Unavailable by ICMP ping</name>
+                                    <expression>max(/SCALANCE XC206-2SFP by SNMP/icmpping,#3)=0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>d9a1b322f1ba479cafcad3abf905dcee</uuid>
+                    <name>Fan Discovery</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>discovery[{#SNMPINDEX},1.3.6.1.4.1.4329.20.1.1.47.1.1]</snmp_oid>
+                    <key>fan.discovery</key>
+                    <delay>1h</delay>
+                    <lifetime>30d</lifetime>
+                    <enabled_lifetime_type>DISABLE_NEVER</enabled_lifetime_type>
+                    <description>Odkrywanie wentylatorów na podstawie snMspsDiagnosticsFanTable.</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>3d430a1736c7431eb0123aec158100c8</uuid>
+                            <name>Fan {#SNMPINDEX}: Speed</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.47.1.1.3.{#SNMPINDEX}</snmp_oid>
+                            <key>sensor.fan.speed[snMspsDiagnosticsFanSpeed.{#SNMPINDEX}]</key>
+                            <delay>3m</delay>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <trends>0</trends>
+                            <units>RPM</units>
+                            <description>Prędkość wentylatora w obrotach na minutę (RPM).</description>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>fan</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>b53e8d62a6d04913b10058379a1a12c3</uuid>
+                            <name>Fan {#SNMPINDEX}: State</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.47.1.1.2.{#SNMPINDEX}</snmp_oid>
+                            <key>sensor.fan.status[snMspsDiagnosticsFanState.{#SNMPINDEX}]</key>
+                            <delay>3m</delay>
+                            <history>7d</history>
+                            <value_type>CHAR</value_type>
+                            <trends>0</trends>
+                            <description>Stan wentylatora. (1: operational, 2: failed, 3: powering, 4: notpowering, 5: notpresent)</description>
+                            <valuemap>
+                                <name>FASTPATH-BOXSERVICES-PRIVATE-MIB::boxServicesFanItemState</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>fan</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>4c62e083a72044b79e8be34cfbca11cc</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sensor.fan.status[snMspsDiagnosticsFanState.{#SNMPINDEX}])=2</expression>
+                                    <name>Fan {#SNMPINDEX} on {HOST.NAME} is in critical state</name>
+                                    <opdata>Current state: {ITEM.LASTVALUE}</opdata>
+                                    <priority>AVERAGE</priority>
+                                    <description>Wentylator jest w stanie krytycznym (failed).</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>availability</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>0611f8a4b6054694a99e2646b2319c7a</uuid>
+                            <name>Fan {#SNMPINDEX}: Speed</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>sensor.fan.speed[snMspsDiagnosticsFanSpeed.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+                <discovery_rule>
+                    <uuid>28033a0cef064fab939a0138d336937b</uuid>
+                    <name>Network interfaces discovery</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>discovery[{#SNMP_OID},1.3.6.1.2.1.2.2.1.2,{#IFALIAS},1.3.6.1.2.1.31.1.1.1.18,{#IFNAME},1.3.6.1.2.1.31.1.1.1.1,{#IFDESCR},1.3.6.1.2.1.2.2.1.2,{#IFTYPE},1.3.6.1.2.1.2.2.1.3,{#IFSPEED},1.3.6.1.2.1.2.2.1.5,{#IFOPERSTATUS},1.3.6.1.2.1.2.2.1.8,{#IFADMINSTATUS},1.3.6.1.2.1.2.2.1.7]</snmp_oid>
+                    <key>net.if.discovery</key>
+                    <delay>1h</delay>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#IFTYPE}</macro>
+                                <value>6</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>30d</lifetime>
+                    <enabled_lifetime_type>DISABLE_NEVER</enabled_lifetime_type>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>3c426974ee904705976a14489f32e744</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Duplex mode</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.10.7.2.1.19.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.duplex[ifMauDplxStatus.{#SNMPINDEX}]</key>
+                            <delay>5m</delay>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <trends>0</trends>
+                            <valuemap>
+                                <name>IF-MIB::dot3StatsDuplexStatus</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>36cdbbe2e343470e9491a2f6847021df</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/net.if.duplex[ifMauDplxStatus.{#SNMPINDEX}])=1</expression>
+                                    <name>Nazwa: Interface {#IFNAME}({#IFALIAS}): Duplex status UNKNOWN</name>
+                                    <priority>WARNING</priority>
+                                    <description>Gdy tryb duplex jest nieznany, trigger jest uruchamiany.</description>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>c379c5720f614777b384f5c95fcc3e16</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Inbound discarded packets</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.2.2.1.13.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.in.discards[ifInDiscards.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>pps</units>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>09def7edc58842f3b455785d3151dbd5</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/net.if.in.discards[ifInDiscards.{#SNMPINDEX}])&gt;{$IF.DISCARDS.WARN}</expression>
+                                    <name>Interface {#IFNAME}({#IFALIAS}): High inbound discarded packet rate</name>
+                                    <priority>WARNING</priority>
+                                    <description>Wysoki wskaźnik odrzuconych pakietów wejściowych na interfejsie {#IFNAME} ({#IFALIAS}).</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>performance</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>2c3c147d526a47f5bdbc2833f1f74682</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Inbound errors</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.2.2.1.14.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.in.errors[ifInErrors.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>bps</units>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>10f2c90fc15546d2bf60c78b966bb4dc</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/net.if.in.errors[ifInErrors.{#SNMPINDEX}])&gt;{$IF.ERRORS.WARN}</expression>
+                                    <name>Interface {#IFNAME}({#IFALIAS}): High inbound error rate</name>
+                                    <priority>WARNING</priority>
+                                    <description>Wysoki wskaźnik błędów wejściowych na interfejsie {#IFNAME} ({#IFALIAS}).</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>performance</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>a3c70823b9664715a35cd2131ee514fa</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Outbound discarded packets</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.2.2.1.19.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.out.discards[ifOutDiscards.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>pps</units>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>fc78bcfd4dab4d269dac259844e92b49</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/net.if.out.discards[ifOutDiscards.{#SNMPINDEX}])&gt;{$IF.DISCARDS.WARN}</expression>
+                                    <name>Interface {#IFNAME}({#IFALIAS}): High outbound discarded packet rate</name>
+                                    <priority>WARNING</priority>
+                                    <description>Wysoki wskaźnik odrzuconych pakietów wyjściowych na interfejsie {#IFNAME} ({#IFALIAS}).</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>performance</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>ff891df3a4af4c78a1313ea79614dbcd</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Outbound errors</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.2.2.1.20.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.out.errors[ifOutErrors.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>bps</units>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>fb47435de0224f328645832d252575dd</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/net.if.out.errors[ifOutErrors.{#SNMPINDEX}])&gt;{$IF.ERRORS.WARN}</expression>
+                                    <name>Interface {#IFNAME}({#IFALIAS}): High outbound error rate</name>
+                                    <priority>WARNING</priority>
+                                    <description>Wysoki wskaźnik błędów wyjściowych na interfejsie {#IFNAME} ({#IFALIAS}).</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>performance</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>5c14ce172bd34f9bbce4270110de3396</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Link speed</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.2.2.1.5.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.speed[ifSpeed.{#SNMPINDEX}]</key>
+                            <delay>5m</delay>
+                            <history>7d</history>
+                            <units>bps</units>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>8f5eb66b1d274a849ffcd7fc3d390ddd</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Admin status</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.2.2.1.7.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.status[ifAdminStatus.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <trends>0</trends>
+                            <valuemap>
+                                <name>IF administrative status</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>f263b35d86074268bceed355e96e407f</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Operational status</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.2.2.1.8.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.status[ifOperStatus.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <trends>0</trends>
+                            <valuemap>
+                                <name>IF operational status</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>a43753da03fc4ae8b47d5a1e6db6f8e3</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/net.if.status[ifOperStatus.{#SNMPINDEX}])=2</expression>
+                                    <name>Interface {#IFNAME}({#IFALIAS}): Link down</name>
+                                    <priority>AVERAGE</priority>
+                                    <description>Interfejs {#IFNAME} ({#IFALIAS}) jest w stanie 'down'.</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>availability</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>b69a006e7a46476982320f5926024c1d</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Link Flap Detection State</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.29.90.1.2.{#SNMPINDEX}</snmp_oid>
+                            <key>snmp.get[snMspsPortFaultMaskState.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <trends>0</trends>
+                            <valuemap>
+                                <name>SNMP_PORT_FAULT_MASK_STATE</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>0629164bccc54cf7b7f2590f21c546ab</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/snmp.get[snMspsPortFaultMaskState.{#SNMPINDEX}])=4</expression>
+                                    <name>Interface {#IFNAME}({#IFALIAS}): Link flapping detected</name>
+                                    <priority>HIGH</priority>
+                                    <description>Wykryto niestabilność linku (flapping) na interfejsie {#IFNAME} ({#IFALIAS}).</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>availability</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>e6ff07d5274446389ddbbc2acac45ca6</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Port Lock State</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.29.90.1.3.{#SNMPINDEX}</snmp_oid>
+                            <key>snmp.get[snMspsPortLockState.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <trends>0</trends>
+                            <valuemap>
+                                <name>SNMP_PORT_LOCK_STATE</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>security</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>2d1221da84f44c2a88a1618e1f9921c7</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/snmp.get[snMspsPortLockState.{#SNMPINDEX}])=2</expression>
+                                    <name>Interface {#IFNAME}({#IFALIAS}): Port is locked</name>
+                                    <priority>WARNING</priority>
+                                    <description>Port {#IFNAME} ({#IFALIAS}) jest zablokowany (MAC Learning i Forwarding wyłączone).</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>security</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>c8a32f3ab3254dd583117962dca2e4cf</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Admin status</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>net.if.status[ifAdminStatus.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>b02431dc759242fda98ea0d6177e3a34</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Duplex mode</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>net.if.duplex[ifMauDplxStatus.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>25ea511211cd4ce5afe89165e2b710c2</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Link Flap Detection State</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>snmp.get[snMspsPortFaultMaskState.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>b726a2cce789407485a3a2e7f42456cf</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Link speed</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>net.if.speed[ifSpeed.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>43e283f9d69340e98610473acb58494a</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Outbound / Inbound errors / discarded</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>net.if.in.discards[ifInDiscards.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>F63100</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>net.if.in.errors[ifInErrors.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>2774A4</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>net.if.out.discards[ifOutDiscards.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>3</sortorder>
+                                    <color>F7941D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>net.if.out.errors[ifOutErrors.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>b5da9efac46449aa842908910a0f70ce</uuid>
+                            <name>Interface {#IFNAME}({#IFALIAS}): Port Lock State</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>snmp.get[snMspsPortLockState.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+                <discovery_rule>
+                    <uuid>6a4ab505537748a79ca160ed20174624</uuid>
+                    <name>Power Supply Discovery</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>discovery[{#SNMPINDEX},1.3.6.1.4.1.4329.20.1.1.28.1.1]</snmp_oid>
+                    <key>psu.discovery</key>
+                    <delay>1h</delay>
+                    <lifetime>30d</lifetime>
+                    <enabled_lifetime_type>DISABLE_NEVER</enabled_lifetime_type>
+                    <description>Odkrywanie zasilaczy na podstawie snMspsDiagnosticsPowerSupplyTable.</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>b6d5add161f147908d7e9ce2192cd796</uuid>
+                            <name>Power Supply {#SNMPINDEX}: State</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.28.1.1.2.{#SNMPINDEX}</snmp_oid>
+                            <key>sensor.psu.status[snMspsDiagnosticsPowerSupplyState.{#SNMPINDEX}]</key>
+                            <delay>3m</delay>
+                            <history>7d</history>
+                            <value_type>CHAR</value_type>
+                            <trends>0</trends>
+                            <description>Stan zasilacza. (1: inactive, 2: active, 3: not-present)</description>
+                            <valuemap>
+                                <name>SNMP_POWER_STATE</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>power</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>1846d4a0b5a64836b963e2581c76f5f6</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sensor.psu.status[snMspsDiagnosticsPowerSupplyState.{#SNMPINDEX}])=1</expression>
+                                    <name>Power Supply {#SNMPINDEX} on {HOST.NAME} is inactive</name>
+                                    <opdata>Current state: {ITEM.LASTVALUE}</opdata>
+                                    <priority>HIGH</priority>
+                                    <description>Zasilacz jest nieaktywny.</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>availability</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+                <discovery_rule>
+                    <uuid>efbba968c02e485aa075f9c9582c9d07</uuid>
+                    <name>SFP Diagnostics Discovery</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>discovery[{#SNMPINDEX},1.3.6.1.4.1.4329.20.1.1.46.10.1]</snmp_oid>
+                    <key>sfp.diagnostics.discovery</key>
+                    <delay>1h</delay>
+                    <lifetime>30d</lifetime>
+                    <enabled_lifetime_type>DISABLE_NEVER</enabled_lifetime_type>
+                    <description>Odkrywanie diagnostyki SFP na podstawie snMspsDiagnosticsTemperatureEntry.</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>9957a1f4830d450c8f02bb6c3069a642</uuid>
+                            <name>SFP {#SNMPINDEX}: Bias Current</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.10.1.16.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.bias.current[snMspsDiagnosticsBiasCurrentValue.{#SNMPINDEX}]</key>
+                            <delay>3m</delay>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>mA</units>
+                            <description>Prąd biasu lasera modułu SFP.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>0.002</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>8305957250d847d3a3f626544780e426</uuid>
+                            <name>SFP {#SNMPINDEX}: Rx Power</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.10.1.22.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.rx.power[snMspsDiagnosticsRxPowerValue.{#SNMPINDEX}]</key>
+                            <delay>3m</delay>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>dBm</units>
+                            <description>Moc optyczna odbierania modułu SFP.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>0.0001</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>ed0912f1e081453593caaa480840f86c</uuid>
+                            <name>SFP {#SNMPINDEX}: Temperature</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.10.1.10.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.temp.value[snMspsDiagnosticsTemperatureValue.{#SNMPINDEX}]</key>
+                            <delay>3m</delay>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>C</units>
+                            <description>Temperatura modułu SFP.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>0.01</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>5be60aea21214beda1fd1c34e8b5372c</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.temp.value[snMspsDiagnosticsTemperatureValue.{#SNMPINDEX}])&gt;{$SFP.TEMP.CRIT}</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.temp.value[snMspsDiagnosticsTemperatureValue.{#SNMPINDEX}])&lt;{$SFP.TEMP.CRIT}-3</recovery_expression>
+                                    <name>SFP {#SNMPINDEX}: Temperature is above critical threshold ({ITEM.LASTVALUE})</name>
+                                    <opdata>Current value: {ITEM.LASTVALUE}</opdata>
+                                    <priority>HIGH</priority>
+                                    <description>Temperatura modułu SFP jest powyżej krytycznego progu.</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>availability</value>
+                                        </tag>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>performance</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>eda726aca2d2478d9a30346326ba248b</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.temp.value[snMspsDiagnosticsTemperatureValue.{#SNMPINDEX}])&gt;{$SFP.TEMP.WARN}</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.temp.value[snMspsDiagnosticsTemperatureValue.{#SNMPINDEX}])&lt;{$SFP.TEMP.WARN}-3</recovery_expression>
+                                    <name>SFP {#SNMPINDEX}: Temperature is above warning threshold ({ITEM.LASTVALUE})</name>
+                                    <opdata>Current value: {ITEM.LASTVALUE}</opdata>
+                                    <priority>WARNING</priority>
+                                    <description>Temperatura modułu SFP jest powyżej progu ostrzegawczego.</description>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>SFP {#SNMPINDEX}: Temperature is above critical threshold ({ITEM.LASTVALUE})</name>
+                                            <expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.temp.value[snMspsDiagnosticsTemperatureValue.{#SNMPINDEX}])&gt;{$SFP.TEMP.CRIT}</expression>
+                                            <recovery_expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.temp.value[snMspsDiagnosticsTemperatureValue.{#SNMPINDEX}])&lt;{$SFP.TEMP.CRIT}-3</recovery_expression>
+                                        </dependency>
+                                    </dependencies>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>availability</value>
+                                        </tag>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>performance</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>68a6e58d934343daa43a2af1fbcbd635</uuid>
+                            <name>SFP {#SNMPINDEX}: Tx Power</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.10.1.19.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.tx.power[snMspsDiagnosticsTxPowerValue.{#SNMPINDEX}]</key>
+                            <delay>3m</delay>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>dBm</units>
+                            <description>Moc optyczna nadawania modułu SFP.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>0.0001</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>c28675b889004d25aac52132f0c182be</uuid>
+                            <name>SFP {#SNMPINDEX}: Voltage</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.10.1.13.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.voltage.value[snMspsDiagnosticsVoltageValue.{#SNMPINDEX}]</key>
+                            <delay>3m</delay>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>V</units>
+                            <description>Napięcie modułu SFP.</description>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>0.0001</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>3014ac49dbcb48ca8aee451e928b3c0f</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.voltage.value[snMspsDiagnosticsVoltageValue.{#SNMPINDEX}])&lt;{$SFP.VOLTAGE.WARN}</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.voltage.value[snMspsDiagnosticsVoltageValue.{#SNMPINDEX}])&gt;{$SFP.VOLTAGE.WARN}+0.1</recovery_expression>
+                                    <name>SFP {#SNMPINDEX}: Voltage is too low ({ITEM.LASTVALUE})</name>
+                                    <opdata>Current value: {ITEM.LASTVALUE}</opdata>
+                                    <priority>WARNING</priority>
+                                    <description>Napięcie modułu SFP jest zbyt niskie.</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>availability</value>
+                                        </tag>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>performance</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>9a1fdd3e34e74570906951745b338cc5</uuid>
+                            <name>SFP {#SNMPINDEX}: Bias Current</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>sfp.bias.current[snMspsDiagnosticsBiasCurrentValue.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>163695fff63a45de877ea723297cd911</uuid>
+                            <name>SFP {#SNMPINDEX}: Power</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>sfp.rx.power[snMspsDiagnosticsRxPowerValue.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>F63100</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>sfp.tx.power[snMspsDiagnosticsTxPowerValue.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>084d1761764644c993d645b61340f588</uuid>
+                            <name>SFP {#SNMPINDEX}: Temperature</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>sfp.temp.value[snMspsDiagnosticsTemperatureValue.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>b80419c92f9748e396f24024ea939ac7</uuid>
+                            <name>SFP {#SNMPINDEX}: Voltage</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>sfp.voltage.value[snMspsDiagnosticsVoltageValue.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+                <discovery_rule>
+                    <uuid>232e26b1f3a3434183b25dc3f216ca8f</uuid>
+                    <name>SFP modules discovery</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>discovery[{#SNMP_OID},1.3.6.1.4.1.4329.20.1.1.46.90.1.3,{#SFPNAME},1.3.6.1.4.1.4329.20.1.1.46.90.1.4,{#SFPMODEL},1.3.6.1.4.1.4329.20.1.1.46.90.1.6,{#SFPSERIAL}]</snmp_oid>
+                    <key>sfp.discovery</key>
+                    <delay>1h</delay>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#SFPNAME}</macro>
+                                <value>.+</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <lifetime>30d</lifetime>
+                    <enabled_lifetime_type>DISABLE_NEVER</enabled_lifetime_type>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>a86c0393858e4251a2eae65a9bfc2e96</uuid>
+                            <name>SFP {#SFPNAME} ({#SFPSERIAL}): Current</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.90.1.16.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.current[snMspsSfpCurrent.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>mA</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>1.0E-6</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>health</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>3efdf60f306744d3b053c584673490b7</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.current[snMspsSfpCurrent.{#SNMPINDEX}])&lt;{$SFP.CURRENT.MIN} or last(/SCALANCE XC206-2SFP by SNMP/sfp.current[snMspsSfpCurrent.{#SNMPINDEX}])&gt;{$SFP.CURRENT.MAX}</expression>
+                                    <name>SFP {#SFPNAME} ({#SFPSERIAL}): Current out of range</name>
+                                    <priority>WARNING</priority>
+                                    <description>Prąd modułu SFP {#SFPNAME} ({#SFPSERIAL}) poza zakresem.</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>health</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>f30a600c3e0b4b35a0e2c88ce8515833</uuid>
+                            <name>SFP {#SFPNAME} ({#SFPSERIAL}): RX Power (dBm)</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.90.1.25.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.rx_power[snMspsSfpRxPowerdBm.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>dBm</units>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>835f52c8821a4e87935f025676b577fb</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.rx_power[snMspsSfpRxPowerdBm.{#SNMPINDEX}])&lt;{$SFP.RX.POWER.WARN}</expression>
+                                    <name>SFP {#SFPNAME} ({#SFPSERIAL}): Low RX Power</name>
+                                    <priority>WARNING</priority>
+                                    <description>Niska moc odbiorcza (RX) modułu SFP {#SFPNAME} ({#SFPSERIAL}).</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>performance</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>bd2cd9450ce344a3b00d679d3570e245</uuid>
+                            <name>SFP {#SFPNAME} ({#SFPSERIAL}): Status</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.90.1.2.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.status[snMspsSfpStatus.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <trends>0</trends>
+                            <valuemap>
+                                <name>SNMP_TRUTH_VALUE</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>08e488354b1845e1b308fb1c5eba1ad1</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.status[snMspsSfpStatus.{#SNMPINDEX}])=2</expression>
+                                    <name>SFP {#SFPNAME} ({#SFPSERIAL}): Module missing or faulty</name>
+                                    <priority>HIGH</priority>
+                                    <description>Moduł SFP {#SFPNAME} ({#SFPSERIAL}) jest brakujący lub uszkodzony.</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>availability</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>1d4574453c7e4110932f7af09bda0b97</uuid>
+                            <name>SFP {#SFPNAME} ({#SFPSERIAL}): Temperature</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.90.1.10.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.temp[snMspsSfpTemperature.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>°C</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>0.01</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>health</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>d268d8ebed2a47cabdf0f73b3fb4aea2</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.temp[snMspsSfpTemperature.{#SNMPINDEX}])&gt;{$SFP.TEMP.WARN}</expression>
+                                    <name>SFP {#SFPNAME} ({#SFPSERIAL}): High temperature</name>
+                                    <priority>WARNING</priority>
+                                    <description>Wysoka temperatura modułu SFP {#SFPNAME} ({#SFPSERIAL}).</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>health</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>5d70843e0a34491ba0821ff9c5760c85</uuid>
+                            <name>SFP {#SFPNAME} ({#SFPSERIAL}): TX Power (dBm)</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.90.1.28.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.tx_power[snMspsSfpTxPowerdBm.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>dBm</units>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>324dcb3d46bc4d51aeb8111f64479837</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.tx_power[snMspsSfpTxPowerdBm.{#SNMPINDEX}])&lt;{$SFP.TX.POWER.WARN}</expression>
+                                    <name>SFP {#SFPNAME} ({#SFPSERIAL}): Low TX Power</name>
+                                    <priority>WARNING</priority>
+                                    <description>Niska moc nadawcza (TX) modułu SFP {#SFPNAME} ({#SFPSERIAL}).</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>performance</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>4efab24356b94cf78e30061ee5857f45</uuid>
+                            <name>SFP {#SFPNAME} ({#SFPSERIAL}): Voltage</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.4.1.4329.20.1.1.46.90.1.13.{#SNMPINDEX}</snmp_oid>
+                            <key>sfp.voltage[snMspsSfpVoltage.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>V</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>0.0001</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>sfp</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>health</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>1b54e0844d634e57a84daf6d8746d3df</uuid>
+                                    <expression>last(/SCALANCE XC206-2SFP by SNMP/sfp.voltage[snMspsSfpVoltage.{#SNMPINDEX}])&lt;{$SFP.VOLTAGE.MIN} or last(/SCALANCE XC206-2SFP by SNMP/sfp.voltage[snMspsSfpVoltage.{#SNMPINDEX}])&gt;{$SFP.VOLTAGE.MAX}</expression>
+                                    <name>SFP {#SFPNAME} ({#SFPSERIAL}): Voltage out of range</name>
+                                    <priority>WARNING</priority>
+                                    <description>Napięcie modułu SFP {#SFPNAME} ({#SFPSERIAL}) poza zakresem.</description>
+                                    <tags>
+                                        <tag>
+                                            <tag>scope</tag>
+                                            <value>health</value>
+                                        </tag>
+                                    </tags>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>7218507b555646f8afd62ed17375c060</uuid>
+                            <name>SFP {#SFPNAME} ({#SFPSERIAL}): Status</name>
+                            <graph_items>
+                                <graph_item>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                                        <key>sfp.status[snMspsSfpStatus.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$CPU.UTIL.CRIT}</macro>
+                    <value>90</value>
+                </macro>
+                <macro>
+                    <macro>{$ICMP.LOSS_WARN}</macro>
+                    <value>20</value>
+                </macro>
+                <macro>
+                    <macro>{$ICMP.RESPONSE_TIME.WARN}</macro>
+                    <value>0.15</value>
+                </macro>
+                <macro>
+                    <macro>{$IF.DISCARDS.WARN}</macro>
+                    <value>10</value>
+                </macro>
+                <macro>
+                    <macro>{$IF.ERRORS.WARN}</macro>
+                    <value>2</value>
+                </macro>
+                <macro>
+                    <macro>{$MOBILE.SIGNAL.STRENGTH.WARN}</macro>
+                    <value>-90</value>
+                </macro>
+                <macro>
+                    <macro>{$SFP.CURRENT.MAX}</macro>
+                    <value>0.1</value>
+                </macro>
+                <macro>
+                    <macro>{$SFP.CURRENT.MIN}</macro>
+                    <value>0.005</value>
+                </macro>
+                <macro>
+                    <macro>{$SFP.RX.POWER.WARN}</macro>
+                    <value>-20</value>
+                </macro>
+                <macro>
+                    <macro>{$SFP.TEMP.WARN}</macro>
+                    <value>70</value>
+                </macro>
+                <macro>
+                    <macro>{$SFP.TX.POWER.WARN}</macro>
+                    <value>-10</value>
+                </macro>
+                <macro>
+                    <macro>{$SFP.VOLTAGE.MAX}</macro>
+                    <value>3.6</value>
+                </macro>
+                <macro>
+                    <macro>{$SFP.VOLTAGE.MIN}</macro>
+                    <value>3.0</value>
+                </macro>
+                <macro>
+                    <macro>{$SNMP.TIMEOUT}</macro>
+                    <value>30s</value>
+                </macro>
+            </macros>
+            <dashboards>
+                <dashboard>
+                    <uuid>893fe8b3f25540229f5b4171cb99f22d</uuid>
+                    <name>Network interfaces</name>
+                    <pages>
+                        <page>
+                            <widgets>
+                                <widget>
+                                    <type>graphprototype</type>
+                                    <width>72</width>
+                                    <height>5</height>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>columns</name>
+                                            <value>1</value>
+                                        </field>
+                                        <field>
+                                            <type>STRING</type>
+                                            <name>reference</name>
+                                            <value>AAAAA</value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                            </widgets>
+                        </page>
+                    </pages>
+                </dashboard>
+            </dashboards>
+            <valuemaps>
+                <valuemap>
+                    <uuid>e9245f78265c415c99bb99b8be71b7a0</uuid>
+                    <name>FASTPATH-BOXSERVICES-PRIVATE-MIB::boxServicesFanItemState</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>operational</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>failed</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>powering</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>notpowering</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>notpresent</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>c10fed6b770c4f8e96efe8459519ae0f</uuid>
+                    <name>IF-MIB::dot3StatsDuplexStatus</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>unknown</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>halfDuplex</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>fullDuplex</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>5a758c9aaabe4d479329498f330477db</uuid>
+                    <name>IF-MIB::ifType</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>other</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>6</value>
+                            <newvalue>ethernetCsmacd</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>7</value>
+                            <newvalue>iso88023Csmacd</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>11</value>
+                            <newvalue>starLan</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>62</value>
+                            <newvalue>fastEther</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>69</value>
+                            <newvalue>fastEtherFX</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>117</value>
+                            <newvalue>gigabitEthernet</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>f17f5492fb094afda758003c4f132d18</uuid>
+                    <name>IF administrative status</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>up</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>testing</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>8b27d9a211e043cba867ae43923f84ed</uuid>
+                    <name>IF operational status</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>up</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>testing</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>unknown</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>dormant</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>6</value>
+                            <newvalue>notPresent</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>7</value>
+                            <newvalue>lowerLayerDown</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>043b7e0412614fa5b6fe7ad653e4e100</uuid>
+                    <name>Service state</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>4f38df67d2a54062b295ae9bbdc400bf</uuid>
+                    <name>SNMP_AUTH_METHOD</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>local</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>remoteRadius</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>remoteTacacs</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>radiusFallbackToLocal</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>tacacsFallbackToLocal</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>6</value>
+                            <newvalue>localFallbackToRadius</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>0bf2e2d64fb24ca8820e9133c127a6bb</uuid>
+                    <name>SNMP_FAULT_STATE</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>noFault</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>fault</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>f0bd8dac192f44c0bac1dc5def264023</uuid>
+                    <name>SNMP_IF_OPER_STATUS</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>up</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>testing</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>unknown</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>dormant</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>6</value>
+                            <newvalue>notPresent</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>7</value>
+                            <newvalue>lowerLayerDown</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>5e860f24d0ca4128a7ccd2927ff0ac4f</uuid>
+                    <name>SNMP_IF_STATUS</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>up</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>testing</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>393ba1cdfba6430d98aa7d5494fec5cb</uuid>
+                    <name>SNMP_MOBILE_CONNECTION_STATUS</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Idle</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>HomeNetwork</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>Searching</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>Roaming</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>EmergencyCall</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>6</value>
+                            <newvalue>NoService</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>7</value>
+                            <newvalue>Unknown</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>e48d60c261fd4c3eb0db09cd3bb44e8e</uuid>
+                    <name>SNMP_PIN_STATUS</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>validPIN</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>wrongPIN</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>requirePIN</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>blocked</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>pukRequired</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>6</value>
+                            <newvalue>unknown</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>6f9c8e753ba24e5d820e9eed2f5ba43a</uuid>
+                    <name>SNMP_PORT_FAULT_MASK_STATE</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>checked-link-down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>notChecked</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>checked-link-up</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>checked-flap</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>3fcc6917079b4012b3e8be1e4de3e293</uuid>
+                    <name>SNMP_PORT_LOCK_STATE</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>disabled</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>enabled</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>173dfc3854694fa8bc9810f94d9fe6b3</uuid>
+                    <name>SNMP_POWER_STATE</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>inactive</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>active</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>not-present</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>f5b7442ba86c4753b1044220d3d4f418</uuid>
+                    <name>SNMP_SIM_CARD_STATUS</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>present</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>missing</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>defective</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>unknown</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>pending</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>d9e74465035c4cd5a5b3b28d04e60320</uuid>
+                    <name>SNMP_SINEMA_RC_STATUS</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>established</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>pending</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>error</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>disabled</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>unknown</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>2e0dde19896c4ea58e37a1aa4b128fa1</uuid>
+                    <name>SNMP_TRUTH_VALUE</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>true</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>false</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>945f9c3eae4e4f74a4393b165a6c6ca4</uuid>
+                    <name>zabbix.host.available</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>not available</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>available</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>unknown</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <uuid>2f25ceefc11b4166ae7b8bbbbe7f66a9</uuid>
+            <expression>(last(/SCALANCE XC206-2SFP by SNMP/system.hw.uptime[hrSystemUptime.0])&gt;0 and last(/SCALANCE XC206-2SFP by SNMP/system.hw.uptime[hrSystemUptime.0])&lt;10m) or (last(/SCALANCE XC206-2SFP by SNMP/system.hw.uptime[hrSystemUptime.0])=0 and last(/SCALANCE XC206-2SFP by SNMP/system.net.uptime[sysUpTime.0])&lt;10m)</expression>
+            <name>Scalance X200 MSPS: Host has been restarted</name>
+            <event_name>Scalance X200 MSPS: {HOST.NAME} has been restarted (uptime &lt; 10m)</event_name>
+            <priority>WARNING</priority>
+            <description>Czas działania jest krótszy niż 10 minut.</description>
+            <manual_close>YES</manual_close>
+            <dependencies>
+                <dependency>
+                    <name>Scalance X200 MSPS: No SNMP data collection</name>
+                    <expression>max(/SCALANCE XC206-2SFP by SNMP/zabbix[host,snmp,available],{$SNMP.TIMEOUT})=0</expression>
+                </dependency>
+            </dependencies>
+            <tags>
+                <tag>
+                    <tag>scope</tag>
+                    <value>notice</value>
+                </tag>
+            </tags>
+        </trigger>
+    </triggers>
+    <graphs>
+        <graph>
+            <uuid>74a1548bf1c044a584c3f1bf46d115f0</uuid>
+            <name>ICMP</name>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                        <key>icmppingloss</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>F63100</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                        <key>icmpping</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>2774A4</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                        <key>icmppingsec</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>56869216ff9f41609fcc4d9ed324e912</uuid>
+            <name>SNMP</name>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                        <key>zabbix[host,snmp,available]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>e8f4a7acb79e468685cf0452b6b5d6ca</uuid>
+            <name>Uptime</name>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                        <key>system.hw.uptime[hrSystemUptime.0]</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>F63100</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>SCALANCE XC206-2SFP by SNMP</host>
+                        <key>system.net.uptime[sysUpTime.0]</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+</zabbix_export>
