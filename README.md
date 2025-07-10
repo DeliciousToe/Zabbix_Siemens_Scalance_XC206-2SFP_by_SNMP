@@ -1,0 +1,1 @@
+# Zabbix_Siemens_Scalance_XC206-2SFP_by_SNMP
